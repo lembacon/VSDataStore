@@ -136,12 +136,22 @@
 
 - (void)addDataObject:(VSDataObject *)dataObject
 {
-  [[VSDataModel sharedModel] dataManager:self setAllValuesForDataObject:dataObject];
+  if ([[VSDataModel sharedModel] dataManager:self setAllValuesForDataObject:dataObject]) {
+    NSMutableDictionary *dict = [_dictionaries objectForKey:(id)[dataObject class]];
+    if (dict != nil) {
+      [dict setObject:dataObject forKey:[dataObject uniqueIdentifier]];
+    }
+  }
 }
 
 - (void)removeDataObject:(VSDataObject *)dataObject
 {
-  [[VSDataModel sharedModel] dataManager:self eraseAllValuesForDataObject:dataObject];
+  if ([[VSDataModel sharedModel] dataManager:self eraseAllValuesForDataObject:dataObject]) {
+    NSMutableDictionary *dict = [_dictionaries objectForKey:(id)[dataObject class]];
+    if (dict != nil) {
+      [dict removeObjectForKey:[dataObject uniqueIdentifier]];
+    }
+  }
 }
 
 @end

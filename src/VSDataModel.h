@@ -44,8 +44,8 @@
 - (void)dataObject:(VSDataObject *)dataObject willChangeValueForKey:(NSString *)key;
 - (void)dataObject:(VSDataObject *)dataObject didChangeValueForKey:(NSString *)key;
 
-- (void)dataManager:(VSDataManager *)dataManager eraseAllValuesForDataObject:(VSDataObject *)dataObject;
-- (void)dataManager:(VSDataManager *)dataManager setAllValuesForDataObject:(VSDataObject *)dataObject;
+- (BOOL)dataManager:(VSDataManager *)dataManager eraseAllValuesForDataObject:(VSDataObject *)dataObject;
+- (BOOL)dataManager:(VSDataManager *)dataManager setAllValuesForDataObject:(VSDataObject *)dataObject;
 
 - (NSString *)uniqueIdentifierForDataObject:(VSDataObject *)dataObject;
 - (VSDataObject *)dataObjectWithClass:(Class)class dictionary:(NSDictionary *)dictionary dataManager:(VSDataManager *)dataManager;

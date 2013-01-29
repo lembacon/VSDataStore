@@ -661,34 +661,45 @@ nextAttribute:
   }
 }
 
-- (void)dataManager:(VSDataManager *)dataManager eraseAllValuesForDataObject:(VSDataObject *)dataObject
+- (BOOL)dataManager:(VSDataManager *)dataManager eraseAllValuesForDataObject:(VSDataObject *)dataObject
 {
   if ([dataObject dataManager] != dataManager) {
-    return;
+    return NO;
   }
 
   NSString *uniqueIdentifier = [self uniqueIdentifierForDataObject:dataObject];
   NSString *modelIdentifier = [[dataObject class] modelIdentifier];
+
+  if (uniqueIdentifier == nil) {
+    VSDMLog(@"unique identifier is not set in '%@'", NSStringFromClass([dataObject class]));
+    return NO;
+  }
 
   for (NSString *propertyName in [dataObject extraDictionary]) {
     [dataManager setValue:nil forProperty:propertyName uniqueIdentifier:uniqueIdentifier modelIdentifier:modelIdentifier];
   }
 
   [dataObject setDataManager:nil];
+  return YES;
 }
 
-- (void)dataManager:(VSDataManager *)dataManager setAllValuesForDataObject:(VSDataObject *)dataObject
+- (BOOL)dataManager:(VSDataManager *)dataManager setAllValuesForDataObject:(VSDataObject *)dataObject
 {
   if ([dataObject dataManager] != nil) {
-    return;
+    return NO;
   }
 
   NSString *uniqueIdentifier = [self uniqueIdentifierForDataObject:dataObject];
   NSString *modelIdentifier = [[dataObject class] modelIdentifier];
 
+  if (uniqueIdentifier == nil) {
+    VSDMLog(@"unique identifier is not set in '%@'", NSStringFromClass([dataObject class]));
+    return NO;
+  }
+
   if ([[dataManager dictionaryOfDataObjectsForClass:[dataObject class]] objectForKey:uniqueIdentifier] != nil) {
     VSDMLog(@"duplicated unique identifier '%@' in '%@'", uniqueIdentifier, NSStringFromClass([dataObject class]));
-    return;
+    return NO;
   }
 
   for (NSString *propertyName in [dataObject extraDictionary]) {
@@ -699,6 +710,7 @@ nextAttribute:
   }
 
   [dataObject setDataManager:dataManager];
+  return YES;
 }
 
 - (NSString *)uniqueIdentifierForDataObject:(VSDataObject *)dataObject
