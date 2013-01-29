@@ -26,7 +26,7 @@
 #import "VSDataManager.h"
 #import "VSDataManager+Private.h"
 #import "VSDataObject.h"
-#include <objc/objc-runtime.h>
+#include <objc/runtime.h>
 
 #ifdef DEBUG
 #define VSDMLog(...) NSLog(@"[VSDataModel] %@", [NSString stringWithFormat:__VA_ARGS__])
