@@ -29,13 +29,32 @@ static NSString *gDefaultDatabaseName = @"VSDataStore.db";
 
 @implementation VSDataManager (DatabasePath)
 
++ (NSString *)_bundleName
+{
+  static NSString *bundleName = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    NSBundle *bundle = [NSBundle mainBundle];
+    if (bundle != nil) {
+      NSDictionary *infoDictionary = [bundle infoDictionary];
+      NSString *name = nil;
+      if (infoDictionary != nil &&
+          (name = [infoDictionary objectForKey:@"CFBundleName"]) != nil) {
+        bundleName = [name copy];
+      }
+    }
+  });
+
+  return bundleName;
+}
+
 + (NSString *)_realDefaultDatabasePath
 {
   static NSString *path = nil;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    if ([NSBundle mainBundle] != nil && [[NSBundle mainBundle] bundleIdentifier] != nil) {
-      NSString *appSupportPath = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]];
+    if ([self _bundleName] != nil) {
+      NSString *appSupportPath = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:[self _bundleName]];
       [[NSFileManager defaultManager] createDirectoryAtPath:appSupportPath withIntermediateDirectories:NO attributes:nil error:NULL];
       path = [[appSupportPath stringByAppendingPathComponent:[self defaultDatabaseName]] copy];
     }
