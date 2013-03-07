@@ -139,4 +139,21 @@
   [super didChangeValueForKey:key withSetMutation:mutationKind usingObjects:objects];
 }
 
+- (id)valueForKey:(NSString *)key
+{
+  id value = nil;
+  if ([[VSDataModel sharedModel] dataObject:self getValue:&value forKey:key]) {
+    return value;
+  }
+
+  return [super valueForKey:key];
+}
+
+- (void)setValue:(id)value forKey:(NSString *)key
+{
+  if (![[VSDataModel sharedModel] dataObject:self setValue:value forKey:key]) {
+    [super setValue:value forKey:key];
+  }
+}
+
 @end

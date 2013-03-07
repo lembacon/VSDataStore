@@ -665,6 +665,51 @@ nextAttribute:
   }
 }
 
+- (BOOL)dataObject:(VSDataObject *)dataObject getValue:(__strong id *)value forKey:(NSString *)key
+{
+  if (key == nil) {
+    return NO;
+  }
+
+  NSDictionary *properties = [self _propertiesForDataObjectClass:[dataObject class]];
+  VSDataObjectPropertyInfo *propInfo = nil;
+  if (properties == nil || (propInfo = [properties objectForKey:key]) == nil) {
+    return NO;
+  }
+
+  NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[propInfo getterSignature]];
+  [invocation setTarget:dataObject];
+  [invocation setSelector:[propInfo getter]];
+  [invocation invoke];
+
+  __unsafe_unretained id valueObject = nil;
+  [invocation getReturnValue:&valueObject];
+  *value = valueObject;
+
+  return YES;
+}
+
+- (BOOL)dataObject:(VSDataObject *)dataObject setValue:(id)value forKey:(NSString *)key
+{
+  if (key == nil) {
+    return NO;
+  }
+
+  NSDictionary *properties = [self _propertiesForDataObjectClass:[dataObject class]];
+  VSDataObjectPropertyInfo *propInfo = nil;
+  if (properties == nil || (propInfo = [properties objectForKey:key]) == nil) {
+    return NO;
+  }
+
+  NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[propInfo setterSignature]];
+  [invocation setTarget:dataObject];
+  [invocation setSelector:[propInfo setter]];
+  [invocation setArgument:&value atIndex:2];
+  [invocation invoke];
+
+  return YES;
+}
+
 - (BOOL)dataManager:(VSDataManager *)dataManager eraseAllValuesForDataObject:(VSDataObject *)dataObject
 {
   if ([dataObject dataManager] != dataManager) {
