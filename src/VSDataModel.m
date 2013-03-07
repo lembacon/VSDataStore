@@ -34,7 +34,7 @@
 #define VSDMLog(...) ((void)0)
 #endif /* DEBUG */
 
-enum {
+typedef NS_OPTIONS(NSUInteger, VSDataObjectPropertyFlags) {
   VSDynamicProperty = 1 << 0,
   VSSynthesizedProperty = 1 << 1,
   VSNonatomicProperty = 1 << 2,
@@ -54,7 +54,6 @@ enum {
 
   VSMutableVariantProperty = 1 << 31
 };
-typedef NSUInteger VSDataObjectPropertyFlags;
 
 static inline void analyzePropertyAttributes(const objc_property_attribute_t *attributes,
                                              unsigned int count,
