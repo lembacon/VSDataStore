@@ -28,11 +28,16 @@
 #import "VSDataObject.h"
 #include <objc/runtime.h>
 
+#if defined(__has_include) && __has_include(<VSFoundation/VSLogger.h>)
+#import <VSFoundation/VSLogger.h>
+#define VSDMLog(format, ...) VSLog(@"[VSDataModel] %@", [NSString stringWithFormat:format, ##__VA_ARGS__])
+#else /* defined(__has_include) && __has_include(<VSFoundation/VSLogger.h>) */
 #ifdef DEBUG
-#define VSDMLog(...) NSLog(@"[VSDataModel] %@", [NSString stringWithFormat:__VA_ARGS__])
+#define VSDMLog(format, ...) NSLog(@"[VSDataModel] %@", [NSString stringWithFormat:format, ##__VA_ARGS__])
 #else /* DEBUG */
-#define VSDMLog(...) ((void)0)
+#define VSDMLog(format, ...) ((void)0)
 #endif /* DEBUG */
+#endif /* defined(__has_include) && __has_include(<VSFoundation/VSLogger.h>) */
 
 typedef NS_OPTIONS(NSUInteger, VSDataObjectPropertyFlags) {
   VSDynamicProperty = 1 << 0,
