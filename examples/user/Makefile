@@ -1,6 +1,20 @@
-SRC = $(wildcard *.m)
-SRC += $(wildcard ../../src/*.c)
-SRC += $(wildcard ../../src/*.m)
+CC = clang
+CFLAGS = -O3 -DNDEBUG -fvisibility=hidden -fvisibility-inlines-hidden -I../../src
+OBJCFLAGS = -fobjc-arc
+LDFLAGS = -framework Foundation -Wl,-S -Wl,-x -Wl,-dead_strip
 
-user: $(SRC)
-	clang -fobjc-arc -framework Foundation -I../../src -o $@ $(SRC)
+OBJECTS := $(patsubst %.c,%.o,$(wildcard ../../src/*.c)) $(patsubst %.m,%.o,$(wildcard ../../src/*.m)) $(patsubst %.m,%.o,$(wildcard *.m))
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+%.o: %.m
+	$(CC) $(CFLAGS) $(OBJCFLAGS) -c -o $@ $<
+
+user: $(OBJECTS)
+	$(CC) $(LDFLAGS) -o $@ $^
+
+clean:
+	rm -f *.o user
+
+.PHONY: clean
