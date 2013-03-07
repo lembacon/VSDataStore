@@ -71,35 +71,35 @@ static inline void analyzePropertyAttributes(const objc_property_attribute_t *at
 
   for (i = 0; i < count; i++) {
     switch (attributes[i].name[0]) {
-      case 'D':
-        *flags |= VSDynamicProperty;
-        break;
-      case 'N':
-        *flags |= VSNonatomicProperty;
-        break;
-      case 'R':
-        *flags |= VSReadonlyProperty;
-        break;
-      case '&':
-        *flags |= VSStrongProperty;
-        break;
-      case 'W':
-        *flags |= VSWeakProperty;
-        break;
-      case 'C':
-        *flags |= VSCopyProperty;
-        break;
-      case 'S':
-        *setterName = attributes[i].value;
-        break;
-      case 'G':
-        *getterName = attributes[i].value;
-        break;
-      case 'T':
-        *typeSignature = attributes[i].value;
-        break;
-      default:
-        break;
+    case 'D':
+      *flags |= VSDynamicProperty;
+      break;
+    case 'N':
+      *flags |= VSNonatomicProperty;
+      break;
+    case 'R':
+      *flags |= VSReadonlyProperty;
+      break;
+    case '&':
+      *flags |= VSStrongProperty;
+      break;
+    case 'W':
+      *flags |= VSWeakProperty;
+      break;
+    case 'C':
+      *flags |= VSCopyProperty;
+      break;
+    case 'S':
+      *setterName = attributes[i].value;
+      break;
+    case 'G':
+      *getterName = attributes[i].value;
+      break;
+    case 'T':
+      *typeSignature = attributes[i].value;
+      break;
+    default:
+      break;
     }
   }
 
@@ -113,15 +113,15 @@ static inline void analyzePropertyAttributes(const objc_property_attribute_t *at
 
   if (*typeSignature != NULL) {
     switch (**typeSignature) {
-      case '@':
-        *flags |= VSObjectTypedProperty;
-        break;
-      case '{':
-        *flags |= VSStructTypedProperty;
-        break;
-      default:
-        *flags |= VSPrimitiveTypedProperty;
-        break;
+    case '@':
+      *flags |= VSObjectTypedProperty;
+      break;
+    case '{':
+      *flags |= VSStructTypedProperty;
+      break;
+    default:
+      *flags |= VSPrimitiveTypedProperty;
+      break;
     }
   }
 }
