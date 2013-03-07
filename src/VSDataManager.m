@@ -33,6 +33,7 @@
 @interface VSDataManager () {
 @private
   vsdb_t _vsdb;
+  NSString *_databasePath;
   NSDictionary *_dictionaries;
 }
 @end
@@ -101,6 +102,7 @@
   self = [super init];
   if (self) {
     _vsdb = vsdb_open([path UTF8String]);
+    _databasePath = path;
 
     NSArray *modelClasses = [[VSDataModel sharedModel] modelClasses];
     NSMutableDictionary *dictionaries = [[NSMutableDictionary alloc] initWithCapacity:[modelClasses count]];
@@ -117,6 +119,18 @@
 {
   vsdb_close(_vsdb);
   _vsdb = NULL;
+}
+
+- (void)reset
+{
+  vsdb_close(_vsdb);
+  [[NSFileManager defaultManager] removeItemAtPath:_databasePath error:NULL];
+
+  _vsdb = vsdb_open([_databasePath UTF8String]);
+  for (id key in _dictionaries) {
+    NSMutableDictionary *dict = [_dictionaries objectForKey:key];
+    [dict removeAllObjects];
+  }
 }
 
 - (void)sync

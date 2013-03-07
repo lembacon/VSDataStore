@@ -32,6 +32,7 @@
 
 - (id)initWithDatabasePath:(NSString *)path;
 
+- (void)reset;
 - (void)sync;
 
 - (NSDictionary *)dictionaryOfDataObjectsForClass:(Class)dataObjectClass;
