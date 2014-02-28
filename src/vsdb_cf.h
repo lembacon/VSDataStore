@@ -1,6 +1,6 @@
 /* vim: set ft=c fenc=utf-8 sw=2 ts=2 et: */
 /*
- * Copyright (c) 2013 Chongyu Zhu <lembacon@gmail.com>
+ * Copyright (c) 2013-2014 Chongyu Zhu <i@lembacon.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
